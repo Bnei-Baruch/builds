@@ -1,5 +1,8 @@
 #!/bin/bash
 
+yum -y install gcc gcc-c++ make zlib-devel pcre-devel openssl-devel gd gd-devel git wget
+
+
 NGINX_VER='1.25.4'
 allModules=(
 https://github.com/openresty/ngx_http_redis.git
