@@ -11,4 +11,4 @@ docker run \
 -v /artifacts:/artifacts \
 -e ARTIFACT_VER="$ARTIFACT_VER" \
 ${BUILD_CONTAINER} \
-/bin/bash /usr/src/nginx/build_${ARTIFACT_NAME}
+/bin/bash /usr/src/${ARTIFACT_NAME}/build_${ARTIFACT_NAME}.sh
