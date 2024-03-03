@@ -1,6 +1,6 @@
 #!/bin/bash
-cd /usr/src
-git clone https://github.com/Bnei-Baruch/builds.git
+# cd /usr/src
+# git clone https://github.com/Bnei-Baruch/builds.git
 
 BUILD_CONTAINER=$1
 ARTIFACT_NAME=$2
