@@ -2,8 +2,6 @@
 
 yum -y install gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
 
-exit 0
-
 NGINX_VER='1.25.4'
 allModules=(
 https://github.com/openresty/ngx_http_redis.git
