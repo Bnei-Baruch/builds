@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yum -y install gcc gcc-c++ make zlib-devel pcre-devel openssl-devel gd gd-devel git wget
+yum -y install gcc gcc-c++ make cmake lib-devel pcre-devel openssl-devel gd gd-devel git wget patch
 
 
 NGINX_VER='1.25.4'
