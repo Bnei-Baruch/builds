@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yum -y install gcc gcc-c++ make cmake lib-devel pcre-devel openssl-devel gd gd-devel git wget patch
+yum -y install gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
 
 exit 0
 
