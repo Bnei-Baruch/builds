@@ -91,3 +91,6 @@ patch -p1 < ../modules/nginx_upstream_check_module/check_1.20.1+.patch
 --with-http_image_filter_module
 
 make -j 4
+
+mkdir -p /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}
+mv  /usr/src/nginx.old/nginx-${NGINX_VER}/objs/nginx /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}
