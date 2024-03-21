@@ -4,9 +4,10 @@ yum -y install gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git w
 
 NGINX_VER="$ARTIFACT_VER"
 allModules=(
-https://github.com/openresty/ngx_http_redis.git
 https://github.com/vozlt/nginx-module-vts.git
 https://github.com/yaoweibin/nginx_upstream_check_module
+https://github.com/openresty/ngx_http_redis.git
+https://github.com/FRiCKLE/ngx_cache_purge.git
 )
 
 
