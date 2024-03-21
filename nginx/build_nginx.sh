@@ -49,6 +49,7 @@ patch -p1 < ../modules/nginx_upstream_check_module/check_1.20.1+.patch
 --add-module=../modules/nginx-module-vts \
 --add-module=../modules/nginx_upstream_check_module \
 --add-module=../modules/ngx_http_redis \
+--add-module=../modules/ngx_cache_purge \
 --add-module=../modules/ngx_brotli \
 --prefix=/etc/nginx \
 --sbin-path=/usr/sbin/nginx \
