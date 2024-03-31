@@ -45,6 +45,9 @@ cd ../nginx-${NGINX_VER}
 
 patch -p1 < ../modules/nginx_upstream_check_module/check_1.20.1+.patch
 
+# download and apply  hpac patch  https://github.com/VirtuBox/nginx-ee/blob/master/nginx-build.sh#L779
+curl -sL https://raw.githubusercontent.com/kn007/patch/master/nginx_dynamic_tls_records.patch | patch -p1
+
 ./configure \
 --add-module=../modules/nginx-module-vts \
 --add-module=../modules/nginx_upstream_check_module \
