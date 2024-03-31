@@ -93,8 +93,7 @@ curl -sL https://raw.githubusercontent.com/kn007/patch/master/nginx_dynamic_tls_
 --with-stream_realip_module \
 --with-stream_ssl_module \
 --with-stream_ssl_preread_module \
---with-http_image_filter_module \
---with-http_v2_hpack_enc
+--with-http_image_filter_module
 
 make -j 4
 
