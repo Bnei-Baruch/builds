@@ -90,7 +90,8 @@ patch -p1 < ../modules/nginx_upstream_check_module/check_1.20.1+.patch
 --with-stream_realip_module \
 --with-stream_ssl_module \
 --with-stream_ssl_preread_module \
---with-http_image_filter_module
+--with-http_image_filter_module \
+--with-http_v2_hpack_enc
 
 make -j 4
 
