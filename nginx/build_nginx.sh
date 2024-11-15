@@ -1,6 +1,29 @@
 #!/bin/bash
 
-yum -y install gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
+dnf update -y
+dnf install epel-release -y
+echo "done with local release"
+
+dnf update -y
+
+dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+echo "done with remote remi  release"
+
+dnf install dnf-utils
+echo "done dnf-utils"
+
+dnf config-manager --set-enabled crb
+dnf config-manager --set-enabled remi
+echo "done with config manger"
+dnf update
+echo "done with dnf update"
+
+dnf install GeoIP -y
+dnf install GeoIP-devel -y || exit -1
+echo "done with dnf"
+
+yum -y install  gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
+echo "done with yum"
 
 NGINX_VER="$ARTIFACT_VER"
 allModules=(
@@ -93,6 +116,7 @@ curl -sL https://raw.githubusercontent.com/kn007/patch/master/nginx_dynamic_tls_
 --with-stream_realip_module \
 --with-stream_ssl_module \
 --with-stream_ssl_preread_module \
+--with-http_geoip_module \
 --with-http_image_filter_module
 
 make -j 4
