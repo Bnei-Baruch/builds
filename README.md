@@ -14,10 +14,10 @@ git clone https://github.com/Bnei-Baruch/builds.git
 cd builds
 bash build.sh rockylinux:9.3 nginx '1.27.2'
 ```
-### parametes
-  1. container to build in
-  2. type of artifact
-  3. version
+### build.sh parametes
+    1. container to build in
+    2. type of artifact
+    3. version
 
 4. get artifact (nginx for example) here:
 
