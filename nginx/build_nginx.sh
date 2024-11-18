@@ -1,29 +1,7 @@
 #!/bin/bash
 
-dnf update -y
-dnf install epel-release -y
-echo "done with local release"
-
-dnf update -y
-
-dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
-echo "done with remote remi  release"
-
-dnf install dnf-utils
-echo "done dnf-utils"
-
-dnf config-manager --set-enabled crb
-dnf config-manager --set-enabled remi
-echo "done with config manger"
-dnf update
-echo "done with dnf update"
-
-dnf install GeoIP -y
-dnf install GeoIP-devel -y || exit -1
-echo "done with dnf"
-
-yum -y install  gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
-echo "done with yum"
+yum -y install libtool automake gcc gcc-c++ make cmake pcre-devel openssl-devel gd gd-devel git wget patch
+echo "done installing packages with yum"
 
 NGINX_VER="$ARTIFACT_VER"
 allModules=(
@@ -31,6 +9,7 @@ https://github.com/vozlt/nginx-module-vts.git
 https://github.com/yaoweibin/nginx_upstream_check_module
 https://github.com/openresty/ngx_http_redis.git
 https://github.com/FRiCKLE/ngx_cache_purge.git
+https://github.com/leev/ngx_http_geoip2_module.git
 )
 
 
@@ -46,6 +25,20 @@ wget -qO- http://nginx.org/download/nginx-${NGINX_VER}.tar.gz | tar -xzf -
 
 cd modules
 
+
+# maxmind lib
+rm -rf libmaxminddb
+git clone --recursive https://github.com/maxmind/libmaxminddb
+cd libmaxminddb
+./bootstrap
+./configure
+make
+make check
+make install
+ldconfig
+cd ../
+
+
 # build brotli
 rm -rf ngx_brotli
 git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
@@ -55,10 +48,14 @@ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-Ofast
 cmake --build . --config Release --target brotlienc
 cd ../../../..
 
+
 # get rest of modules
 
+configureModules=""
 for MOD in ${allModules[@]}; do
-  MOD_NAME=$(echo -n $MOD | awk -F "/" '{print $NF}' | cut -d '.' -f1)
+  MOD_NAME=$(basename "$repo" .git)
+  configureModules+=" --add-module=../modules/$MOD_NAME"
+  #MOD_NAME=$(echo -n $MOD | awk -F "/" '{print $NF}' | cut -d '.' -f1)
   rm -rf $MOD_NAME
   git clone --single-branch $MOD
   echo $MOD
@@ -71,11 +68,14 @@ patch -p1 < ../modules/nginx_upstream_check_module/check_1.20.1+.patch
 # download and apply  hpac patch  https://github.com/VirtuBox/nginx-ee/blob/master/nginx-build.sh#L779
 curl -sL https://raw.githubusercontent.com/kn007/patch/master/nginx_dynamic_tls_records.patch | patch -p1
 
+
 ./configure \
---add-module=../modules/nginx-module-vts \
---add-module=../modules/nginx_upstream_check_module \
---add-module=../modules/ngx_http_redis \
---add-module=../modules/ngx_cache_purge \
+$configureOptions \
+#--add-module=../modules/nginx-module-vts \
+#--add-module=../modules/nginx_upstream_check_module \
+#--add-module=../modules/ngx_http_redis \
+#--add-module=../modules/ngx_cache_purge \
+#--add-module=../modules/ngx_http_geoip2_module \
 --add-module=../modules/ngx_brotli \
 --prefix=/etc/nginx \
 --sbin-path=/usr/sbin/nginx \
@@ -115,11 +115,13 @@ curl -sL https://raw.githubusercontent.com/kn007/patch/master/nginx_dynamic_tls_
 --with-stream \
 --with-stream_realip_module \
 --with-stream_ssl_module \
---with-stream_ssl_preread_module \
---with-http_geoip_module \
---with-http_image_filter_module
+--with-stream_ssl_preread_module
+#--with-http_image_filter_module
 
 make -j 4
 
 mkdir -p /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}
-mv  /usr/src/nginx/nginx-${NGINX_VER}/objs/nginx /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}
+mv /usr/local/lib/libmaxminddb.so.0 /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}/
+mv /usr/local/lib/libmaxminddb.so.0.0.7 /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}/
+mv /usr/local/lib/libmaxminddb.so /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}/
+mv /usr/src/nginx/nginx-${NGINX_VER}/objs/nginx /artifacts/nginx/${BUILD_LINUX}/nginx-${NGINX_VER}
